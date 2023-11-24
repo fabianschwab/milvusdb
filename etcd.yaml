@@ -64,6 +64,8 @@ spec:
         - name: etcd-data
           persistentVolumeClaim:
             claimName: etcd-pvc
+  strategy:
+    type: Recreate
 ---
 apiVersion: v1
 kind: Service

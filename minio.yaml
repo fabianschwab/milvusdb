@@ -60,6 +60,8 @@ spec:
         - name: minio-data
           persistentVolumeClaim:
             claimName: minio-pvc
+  strategy:
+    type: Recreate
 ---
 apiVersion: v1
 kind: Service

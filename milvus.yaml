@@ -56,6 +56,8 @@ spec:
         - name: milvus-data
           persistentVolumeClaim:
             claimName: milvus-pvc
+  strategy:
+    type: Recreate
 ---
 apiVersion: v1
 kind: Service
