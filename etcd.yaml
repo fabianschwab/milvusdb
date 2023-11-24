@@ -16,6 +16,7 @@ metadata:
   name: etcd-deployment
   labels:
     app.kubernetes.io/part-of: MilvusDB
+    app.openshift.io/runtime: redhat
 spec:
   replicas: 1
   selector:
