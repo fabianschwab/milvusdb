@@ -1,0 +1,75 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: milvus-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # Adjust the size according to your needs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: milvus-deployment
+  labels:
+    app.kubernetes.io/part-of: MilvusDB
+    app.openshift.io/runtime: golang
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: milvus
+  template:
+    metadata:
+      labels:
+        app: milvus
+    spec:
+      containers:
+        - name: milvus-container
+          image: docker.io/milvusdb/milvus:latest
+          ports:
+            - containerPort: 19530
+            - containerPort: 9091
+          command:
+            - milvus
+            - run
+            - standalone
+          volumeMounts:
+            - name: milvus-data
+              mountPath: /var/lib/milvus
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: "0.5"
+              memory: 512Mi
+          env:
+            - name: ETCD_ENDPOINTS
+              value: etcd-service:2379
+            - name: MINIO_ADDRESS
+              value: minio-service:9000
+      volumes:
+        - name: milvus-data
+          persistentVolumeClaim:
+            claimName: milvus-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: milvus-service
+spec:
+  selector:
+    app: milvus
+  ports:
+    - name: service-port
+      protocol: TCP
+      port: 19530
+      targetPort: 19530
+    - name: health
+      protocol: TCP
+      port: 9091
+      targetPort: 9091

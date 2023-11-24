@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attu-deployment
+  labels:
+    app.kubernetes.io/part-of: AttuUI
+    app.openshift.io/runtime: nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: attu
+  template:
+    metadata:
+      labels:
+        app: attu
+    spec:
+      containers:
+        - name: attu
+          image: docker.io/zilliz/attu:latest
+          ports:
+            - name: console
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: "0.5"
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attu-service
+spec:
+  selector:
+    app: attu
+  ports:
+    - name: console
+      protocol: TCP
+      port: 8000
+      targetPort: 3000
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: attu-route
+spec:
+  to:
+    kind: Service
+    name: attu-service
+    weight: 100
+  port:
+    targetPort: 3000
+  tls:
+    termination: edge
