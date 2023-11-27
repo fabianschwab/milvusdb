@@ -53,7 +53,8 @@ common:
     authorizationEnabled: true
 ```
 
-This file should be placed under `/milvus/configs` which lives inside the persistent volume claim.
+This file should be placed under `/milvus/configs` which lives inside the persistent volume claim. After scaling back up the deployment you can change
+the password of the root user.
 
 See [documentation](https://milvus.io/docs/configure-helm.md) for all configuration options.
 
