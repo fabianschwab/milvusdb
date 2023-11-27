@@ -22,10 +22,9 @@ Additionally:
 
 ## OpenShift Deployment
 
-Everything can be deployed out of the box without any configuration,
-but it is recommended to change the Milvus default username and password, as this service is available through the public internet.
-
-Optional also the MinIO default username and password can be changed but isn't a must hence the service is only available within the cluster.
+Everything can be deployed out of the box without any configuration, but it is recommended to change the Milvus and MinIO default username and password,
+as this service are both available via routes on the internet.
+If you remove the routes, so that the services are only available withing the cluster, you may leave the settings as they are.
 
 For a OpenShift deployment login to your cluster via `oc` cli.
 
@@ -46,7 +45,17 @@ oc apply -f .
 
 This section explains how to change the default values like username, password or port for the Milvus database service.
 
-TODO
+[values.yaml](./docker/values.yaml)
+
+```yaml
+common:
+  security:
+    authorizationEnabled: true
+```
+
+This file should be placed under `/milvus/configs` which lives inside the persistent volume claim.
+
+See [documentation](https://milvus.io/docs/configure-helm.md) for all configuration options.
 
 ### MinIO configuration
 
