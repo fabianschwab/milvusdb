@@ -103,15 +103,22 @@ podman compose up -d
 
 Starts the 3 components necessary:
 
-- Minio Service
+- MinIO Service
+  - Console is available under [localhost:9001](http://localhost:9001)
+  - API is available under [localhost:9000](http://localhost:9000)
 - etcd Service
+  - Runs on port `2379`
 - Milvus Service
+  - Available on port `19530`
 
 And a GUI to connect to the database:
 
 - Attu Service
+  - UI is available under [localhost:3000](http://localhost:3000)
 
 **Note** that "127.0.0.1" or "localhost" will not work when running Attu on Docker. Use your local IP address.
+Through the `MILVUS_URL` environment variable, the url value in the UI on Attu can be prefilled.
+In this case it's already set to the milvus service as it is name in the compose file.
 
 ## VSI in VPC
 
@@ -119,6 +126,6 @@ Todo
 
 - [ ] Create vsi
 - [ ] Option 1 with docker
-- [ ] Option 2 install
-- [ ] VPC and usage when used in a VPC which also hosts a OpenShift Cluster
-- [ ] Security group for Internet access
+- [ ] Option 2 install directly
+- [ ] VPC and usage when used in a VPC which also hosts an OpenShift cluster
+- [ ] Modify / change security group for internet access
