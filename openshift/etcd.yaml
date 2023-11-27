@@ -32,10 +32,6 @@ spec:
           image: quay.io/coreos/etcd:latest
           command:
             - etcd
-            - "-advertise-client-urls"
-            - "http://127.0.0.1:2379"
-            - "-listen-client-urls"
-            - "http://0.0.0.0:2379"
             - "--data-dir"
             - /etcd
           volumeMounts:
@@ -51,15 +47,6 @@ spec:
             requests:
               cpu: "0.5"
               memory: 512Mi
-          env:
-            - name: ETCD_AUTO_COMPACTION_MODE
-              value: revision
-            - name: ETCD_AUTO_COMPACTION_RETENTION
-              value: "1000"
-            - name: ETCD_QUOTA_BACKEND_BYTES
-              value: "4294967296"
-            - name: ETCD_SNAPSHOT_COUNT
-              value: "50000"
       volumes:
         - name: etcd-data
           persistentVolumeClaim:

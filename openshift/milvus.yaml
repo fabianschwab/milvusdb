@@ -35,7 +35,6 @@ spec:
           image: docker.io/milvusdb/milvus:latest
           ports:
             - containerPort: 19530
-            - containerPort: 9091
           command:
             - milvus
             - run
@@ -55,6 +54,10 @@ spec:
               value: etcd-service:2379
             - name: MINIO_ADDRESS
               value: minio-service:9000
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: minioadmin
       volumes:
         - name: milvus-data
           persistentVolumeClaim:
@@ -70,11 +73,7 @@ spec:
   selector:
     app: milvus
   ports:
-    - name: service-port
+    - name: api
       protocol: TCP
       port: 19530
       targetPort: 19530
-    - name: health
-      protocol: TCP
-      port: 9091
-      targetPort: 9091
