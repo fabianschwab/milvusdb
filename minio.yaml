@@ -14,8 +14,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: minio-deployment
-  annotations:
-    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"milvus-deployment"}]'
   labels:
     app.kubernetes.io/part-of: MilvusDB
     app.openshift.io/runtime: golang
