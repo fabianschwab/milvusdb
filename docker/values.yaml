@@ -1,6 +1,0 @@
-common:
-  security:
-    authorizationEnabled: true
-
-proxy:
-  port: 19530

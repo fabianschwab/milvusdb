@@ -43,27 +43,40 @@ oc apply -f .
 
 ### Milvus configuration
 
-This section explains how to change the default values like username, password or port for the Milvus database service.
+This section explains how to change enable authorization and changing the default values like password and port for the Milvus database service.
+For a complete overview see the official [documentation](https://milvus.io/docs/configure-docker.md#Modify-the-configuration-file).
 
-[values.yaml](./docker/values.yaml)
+To enable authorization change the following entry in the configuration file.
+
+[./config/milvus.yaml](./openshift/config/milvus.yaml) (line: 509)
 
 ```yaml
 common:
   security:
     authorizationEnabled: true
+    superUsers: admin
 ```
 
-This file should be placed under `/milvus/configs` which lives inside the persistent volume claim. After scaling back up the deployment you can change
-the password of the root user.
+Define the super users by comma separating the names. After updating all needed values, the file must be available inside the container as file.
+This can be done by creating a `configMap`.
 
-See [documentation](https://milvus.io/docs/configure-helm.md) for all configuration options.
+```shell
+# From the repositories root folder
+cd openshift
+
+# Create configMap to mount as file
+oc create configmap milvus-config --from-file=./config/milvus.yaml
+```
+
+After starting all services you have to change the password manually as there is no option of predefining it as this was written.
+Using **Attu** UI to login with your defined username or **root** and the default password **Milvus**.
 
 ### MinIO configuration
 
 To change the default username and password for the MinIO service simple change the value of the environment variables of the deployment
 and also in the Milvus deployment, so that the services are still able to talk to each other.
 
-[minio.yaml](./openshift/minio.yaml)
+[minio-resources.yaml](./openshift/minio-resources.yaml)
 
 ```yaml
 ...
@@ -75,7 +88,7 @@ env:
 ...
 ```
 
-[milvus.yaml](./openshift/milvus.yaml)
+[milvus-resources.yaml](./openshift/milvus-resources.yaml)
 
 ```yaml
 ...
@@ -98,7 +111,7 @@ Clustering is designed for handling larger volumes of data and supporting more c
 It provides improved scalability and fault tolerance compared to standalone deployments.
 Clusters are beneficial in production environments where high availability, reliability, and performance are essential.
 
-TODO
+- [ ] TODO
 
 ## Locally
 
@@ -107,8 +120,6 @@ TODO
 cd docker
 
 podman compose up -d
-
-#docker-compose up -d
 ```
 
 Starts the 3 components necessary:
@@ -139,3 +150,7 @@ Todo
 - [ ] Option 2 install directly
 - [ ] VPC and usage when used in a VPC which also hosts an OpenShift cluster
 - [ ] Modify / change security group for internet access
+
+## Open Issues
+
+Attu in version 2.3.3 not connecting

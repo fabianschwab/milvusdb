@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: attu
-          image: docker.io/zilliz/attu:latest
+          image: docker.io/zilliz/attu:v2.3.2
           ports:
             - name: console
               containerPort: 3000
