@@ -151,6 +151,6 @@ Todo
 - [ ] VPC and usage when used in a VPC which also hosts an OpenShift cluster
 - [ ] Modify / change security group for internet access
 
-## Open Issues
+## Good 2 know
 
-Attu in version 2.3.3 not connecting
+In order to make Attu connect successfully to Milvus, the versions must match. So check the versions before deploying.
